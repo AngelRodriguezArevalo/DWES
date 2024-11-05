@@ -1,6 +1,6 @@
 <?php
 $username = 'Angel';
-$greeting = 'Hi, ' . $username . '.';
+$greeting = 'Hola, ' . $username . '.';
 
 $offer = [
     'item' => 'Chocolate',
