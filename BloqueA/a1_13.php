@@ -34,6 +34,8 @@ $offers = [
         'discount' => 5,
     ],
 ];
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -58,5 +60,6 @@ $offers = [
             <p class="sticker">Save $<?= $saving ?></p>
         </div>
     <?php endforeach; ?> 
+
 </body>
 </html>
