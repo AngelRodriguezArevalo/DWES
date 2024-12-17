@@ -52,7 +52,7 @@
     // Instanciación y Manipulación del Objeto
     $library = new Library('Biblioteca Nacional', [
         ['title' => 'El señor de los anillos: La comunidad del anillo', 'author' => 'J.R.R. Tolkien', 'year' => 1954],
-        ['title' => 'Harry Potter y la Priedra Filosofal', 'author' => 'J.K. Rowling', 'year' => 1997],
+        ['title' => 'Harry Potter y la Piedra Filosofal', 'author' => 'J.K. Rowling', 'year' => 1997],
         ['title' => 'Saga Geralt de Rivia: La espada del destino', 'author' => 'Andrzej Sapkowski', 'year' => 1992],
     ]);
 
@@ -60,7 +60,7 @@
     $library->addBook('Harry Potter y la Cámara secreta', 'J.K. Rowling', 1998);
 
     // Eliminar un libro
-    $library->removeBook('Harry Potter y la Priedra Filosofal');
+    $library->removeBook('Harry Potter y la Piedra Filosofal');
 
     // Obtener la lista actualizada de libros
     $books = $library->getBooks();
