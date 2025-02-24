@@ -1,44 +1,42 @@
 <?php
-$durationMessage = '';
-$totalHours = 0;
-$totalMinutes = 0;
+// Configurar la zona horaria predeterminada
+date_default_timezone_set('Europe/London');
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $startDateInput = $_POST["start_date"];
-    $endDateInput = $_POST["end_date"];
+// Parámetros del evento
+$fecha_inicial = '2025-03-01 10:00:00'; // Fecha y hora de inicio del evento
+$duracion_dias = 0;  // Duración en días
+$duracion_horas = 2; // Duración en horas
+$duracion_minutos = 30; // Duración en minutos
+$intervalo_repeticion = 'P7D'; // Evento semanal (cada 7 días)
+$duracion_periodo = 'P2M'; // Mostrar eventos durante 2 meses
 
-    $startDate = DateTime::createFromFormat('d/m/Y H:i:s', $startDateInput);
-    $endDate = DateTime::createFromFormat('d/m/Y H:i:s', $endDateInput);
+// Crear el objeto DateTime para la fecha de inicio
+$inicio_evento = new DateTime($fecha_inicial);
 
-    if ($startDate && $endDate) {
-        // Calcular duración
-        $duration = $startDate->diff($endDate);
-        $durationMessage = $duration->format('%d días, %h horas, %i minutos');
+// Definir el intervalo de repetición
+$intervalo = new DateInterval($intervalo_repeticion);
 
-        // Calcular tiempo total en horas y minutos
-        $totalHours = ($duration->days * 24) + $duration->h;
-        $totalMinutes = $totalHours * 60 + $duration->i;
-    } else {
-        $durationMessage = "Formato de fecha incorrecto.";
-    }
+// Definir el periodo total (2 meses desde la fecha de inicio)
+$fin_periodo = (clone $inicio_evento)->add(new DateInterval($duracion_periodo));
+
+// Generar fechas de eventos recurrentes
+$periodo = new DatePeriod($inicio_evento, $intervalo, $fin_periodo);
+
+// Mostrar eventos generados
+echo "<h2>Lista de Eventos Recurrentes</h2>";
+echo "<table border='1'>";
+echo "<tr><th>Fecha de Inicio</th><th>Fecha de Fin</th><th>Duración</th></tr>";
+
+foreach ($periodo as $evento) {
+    // Calcular la fecha de finalización del evento
+    $fin_evento = (clone $evento)->add(new DateInterval("P{$duracion_dias}DT{$duracion_horas}H{$duracion_minutos}M"));
+    
+    echo "<tr>";
+    echo "<td>" . $evento->format('l, d M Y - H:i') . "</td>";
+    echo "<td>" . $fin_evento->format('l, d M Y - H:i') . "</td>";
+    echo "<td>{$duracion_horas} horas, {$duracion_minutos} minutos</td>";
+    echo "</tr>";
 }
+
+echo "</table>";
 ?>
-
-<?php include 'includes/header.php'; ?>
-
-<form method="POST">
-    <label>Fecha y hora de inicio (dd/mm/yyyy HH:MM:SS):</label>
-    <input type="text" name="start_date" required>
-    <br>
-    <label>Fecha y hora de fin (dd/mm/yyyy HH:MM:SS):</label>
-    <input type="text" name="end_date" required>
-    <br>
-    <button type="submit">Calcular Duración</button>
-</form>
-
-<?php if (!empty($durationMessage)) : ?>
-    <p><b>Duración del evento:</b> <?= $durationMessage ?></p>
-    <p><b>Duración total:</b> <?= $totalHours ?> horas y <?= $totalMinutes % 60 ?> minutos</p>
-<?php endif; ?>
-
-<?php include 'includes/footer.php'; ?>
